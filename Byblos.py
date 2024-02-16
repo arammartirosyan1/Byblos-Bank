@@ -49,6 +49,9 @@ data_property = df.values[15]
 
 if 'Բիբլոս' in str(df.values[2][2]):
     data_insured = pd.read_json('insured.json', orient='index')[0]
+    x = str(df.values[10][8]).strip()
+    ls_1["PROPERTY_OWNER_PERSON_SOCIAL_CARD"] = x
+    ls_1["PROPERTY_OWNER_PERSON_PERS_BPR_USE"] = "1"
 else:
     ls_1["IS_INSURED_PHYSICAL"] = "1"
     for i in range(len(data_insured)):
@@ -282,7 +285,7 @@ benef_data = pd.read_json('beneficiar.json', orient='index')[0]
 excel_data = pd.read_json('News/Property.json', orient='index')[0]
 
 agent_data = pd.read_json('agent.json', orient='index')[0]
-#Merge json files
+
 if 'Բիբլոս' in str(df.values[2][2]):
     insurd_data = pd.read_json('insured.json', orient='index')[0]
     result = pd.concat([insurd_data, benef_data, excel_data, agent_data])
