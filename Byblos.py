@@ -1,4 +1,5 @@
 import pandas as pd
+import json
 import datetime
 from dateutil.relativedelta import relativedelta
 
@@ -48,11 +49,12 @@ data_owner = df.values[10]
 data_property = df.values[15]
 
 if 'Բիբլոս' in str(df.values[2][2]):
-    data_insured = pd.read_json('insured.json', orient='index')[0]
     x = str(df.values[10][8]).strip()
+    ls_1["IS_BENEFICIAR_THE_INSURED"] = '1'
     ls_1["PROPERTY_OWNER_PERSON_SOCIAL_CARD"] = x
     ls_1["PROPERTY_OWNER_PERSON_PERS_BPR_USE"] = "1"
 else:
+    ls_1["IS_BENEFICIAR_THE_INSURED"] = "0"
     ls_1["IS_INSURED_PHYSICAL"] = "1"
     for i in range(len(data_insured)):
         data = data_insured
@@ -168,6 +170,7 @@ else:
         l = pd.Series(ls_1)
         l.to_json('News/Insured.json', indent=2, force_ascii=False)
 
+
 ####################################################################
 #Stecum enq ararkayi jsony
 
@@ -275,8 +278,8 @@ for i in range(len(data_property)):
     except:
         print("error", i, data[i])
 
-    l = pd.Series(ls_1)
-    l.to_json('News/Property.json', indent=2, force_ascii=False)
+l = pd.Series(ls_1)
+l.to_json('News/Property.json', indent=2, force_ascii=False)
 
 #############################################################
 
@@ -286,14 +289,9 @@ excel_data = pd.read_json('News/Property.json', orient='index')[0]
 
 agent_data = pd.read_json('agent.json', orient='index')[0]
 
-if 'Բիբլոս' in str(df.values[2][2]):
-    insurd_data = pd.read_json('insured.json', orient='index')[0]
-    result = pd.concat([insurd_data, benef_data, excel_data, agent_data])
-else:
-    result = pd.concat([benef_data, excel_data, agent_data])
-
-result.to_json('NEWS/New_Format.json', indent=2, force_ascii=False)
+result = pd.concat([benef_data, excel_data, agent_data])
+result.to_json('News/New_Format.json', orient='columns', indent=2, force_ascii=False)
 
 
 
-
+#'split', 'records', 'values', or 'columns'
