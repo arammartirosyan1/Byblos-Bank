@@ -16,6 +16,7 @@ ls_1 = {}
 
 #Stexcel nor excel filer amen toxi hamar anrandzin
 df = pd.read_excel("Byblos.xlsx", header=None)
+
 df_1 = df.loc[4:5]
 df_2 = df.loc[9:10]
 df_3 = df.loc[15:16]
@@ -46,7 +47,9 @@ data_insured = df.values[5]
 data_owner = df.values[10]
 data_property = df.values[15]
 
-if str(df.values[2][0]).strip() == "Ապահովադիր":
+if 'Բիբլոս' in str(df.values[2][2]):
+    data_insured = pd.read_json('insured.json', orient='index')[0]
+else:
     ls_1["IS_INSURED_PHYSICAL"] = "1"
     for i in range(len(data_insured)):
         data = data_insured
@@ -273,14 +276,18 @@ for i in range(len(data_property)):
     l.to_json('News/Property.json', indent=2, force_ascii=False)
 
 #############################################################
-#Merge json files
+
 benef_data = pd.read_json('beneficiar.json', orient='index')[0]
 
-excel_data = pd.read_json('NEWS/Property.json', orient='index')[0]
+excel_data = pd.read_json('News/Property.json', orient='index')[0]
 
 agent_data = pd.read_json('agent.json', orient='index')[0]
-
-result = pd.concat([benef_data, excel_data, agent_data])
+#Merge json files
+if 'Բիբլոս' in str(df.values[2][2]):
+    insurd_data = pd.read_json('insured.json', orient='index')[0]
+    result = pd.concat([insurd_data, benef_data, excel_data, agent_data])
+else:
+    result = pd.concat([benef_data, excel_data, agent_data])
 
 result.to_json('NEWS/New_Format.json', indent=2, force_ascii=False)
 
